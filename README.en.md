@@ -1,4 +1,4 @@
-# wrap_stm_app_project
+# rain_stm_app_project
 
 #### Description
 {**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}

@@ -1,0 +1,17 @@
+# Ignore temporary files
+*.tmp
+*.bak
+*.o
+*.hex
+*.bin
+*.d
+*.axf
+*.htm
+*.lnp
+*.sct
+*.dep
+*.Bak
+*.crf
+*.dbgconf
+*.map
+*.chenshenchao
