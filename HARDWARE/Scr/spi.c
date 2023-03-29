@@ -26,15 +26,40 @@ void SPI1_Init(void)
     SPI1_Handler.Init.CLKPolarity=SPI_POLARITY_HIGH;             //串行同步时钟的空闲状态为高电平
     SPI1_Handler.Init.CLKPhase=SPI_PHASE_2EDGE;                  //串行同步时钟的第二个跳变沿（上升或下降）数据被采样
     SPI1_Handler.Init.NSS=SPI_NSS_SOFT;                          //NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
-    SPI1_Handler.Init.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_2; //定义波特率预分频的值:波特率预分频值为2
-    SPI1_Handler.Init.FirstBit=SPI_FIRSTBIT_MSB;                 //指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
+	  SPI1_Handler.Init.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_2; //定义波特率预分频的值:波特率预分频值为2
+   	SPI1_Handler.Init.FirstBit=SPI_FIRSTBIT_MSB;                 //指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
     SPI1_Handler.Init.TIMode=SPI_TIMODE_DISABLE;                 //关闭TI模式
     SPI1_Handler.Init.CRCCalculation=SPI_CRCCALCULATION_DISABLE; //关闭硬件CRC校验
     SPI1_Handler.Init.CRCPolynomial=7;                           //CRC值计算的多项式
     HAL_SPI_Init(&SPI1_Handler);                                 //初始化
 	__HAL_SPI_ENABLE(&SPI1_Handler);                             //使能SPI1
-	SPI1_ReadWriteByte(0xFF);
+	  SPI1_ReadWriteByte(0xFF);
 }
+
+
+void SPI1_24l01_Init(void)
+{
+
+    SPI1_Handler.Instance=SPI1;                                  //SPI1
+    SPI1_Handler.Init.Mode=SPI_MODE_MASTER;                      //设置SPI工作模式，设置为主模式
+    SPI1_Handler.Init.Direction=SPI_DIRECTION_2LINES;            //设置SPI单向或者双向的数据模式:SPI设置为双线模式
+    SPI1_Handler.Init.DataSize=SPI_DATASIZE_8BIT;                //设置SPI的数据大小:SPI发送接收8位帧结构
+    SPI1_Handler.Init.CLKPolarity=SPI_POLARITY_LOW;             //串行同步时钟的空闲状态为
+    SPI1_Handler.Init.CLKPhase=SPI_PHASE_1EDGE;                  //串行同步时钟的第二个跳变沿（上升或下降）数据被采样
+    SPI1_Handler.Init.NSS=SPI_NSS_SOFT;                          //NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
+	  SPI1_Handler.Init.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_8; //定义波特率预分频的值:波特率预分频值为2
+   	SPI1_Handler.Init.FirstBit=SPI_FIRSTBIT_MSB;                 //指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
+    SPI1_Handler.Init.TIMode=SPI_TIMODE_DISABLE;                 //关闭TI模式
+    SPI1_Handler.Init.CRCCalculation=SPI_CRCCALCULATION_DISABLE; //关闭硬件CRC校验
+    SPI1_Handler.Init.CRCPolynomial=7;                           //CRC值计算的多项式
+    HAL_SPI_Init(&SPI1_Handler);                                 //初始化
+	__HAL_SPI_ENABLE(&SPI1_Handler);                             //使能SPI1
+	  SPI1_ReadWriteByte(0xFF);
+
+	
+	
+}
+
 
 /*-------------------------------------------------*/
 /*函数名：SPI接口的底层初始化                      */
@@ -69,3 +94,18 @@ uint8_t SPI1_ReadWriteByte(uint8_t TxData)
 	HAL_SPI_TransmitReceive(&SPI1_Handler,&TxData,&Rxdata,1, 1000);    //发送并接收一字节数据     
  	return Rxdata;          		                                   //返回收到的数据		
 }
+
+
+
+//SPI 速度设置函数
+//SpeedSet:
+//SPI_BaudRatePrescaler_2   2分频   (SPI 36M@sys 72M)
+//SPI_BaudRatePrescaler_8   8分频   (SPI 9M@sys 72M)
+//SPI_BaudRatePrescaler_16  16分频  (SPI 4.5M@sys 72M)
+//SPI_BaudRatePrescaler_256 256分频 (SPI 281.25K@sys 72M)
+void SPI1_SetSpeed(uint8_t SpeedSet)
+{
+	SPI1->CR1&=0XFFC7; 
+	SPI1->CR1|=SpeedSet;	//设置SPI1速度  
+	SPI1->CR1|=1<<6; 			//SPI设备使能 
+} 

@@ -10,7 +10,7 @@
 #define __W25QXX_H
 
 #include "delay.h"          
-
+#include "stdint.h"
 #define CS_ENABLE        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);Delay_Us(50);    //CS无效信号
 #define CS_DISENABLE     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);Delay_Us(50);  //CS有效信号
 
